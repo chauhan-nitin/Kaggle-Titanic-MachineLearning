@@ -250,3 +250,56 @@ P1_test_rpart=predict(Model_rpart,test_data,type="class")
 final_result <- data.frame(PassengerId, P1_test_rpart)
 names(final_result) <- c("PassengerId","Survived")
 write.csv(final_result,file = "Rpart.csv", row.names = FALSE)
+
+
+
+###############################################################
+#--------------------- RANDOM FOREST -------------------------#
+###############################################################
+#Grid Search for Tuning Hyperparameters using CARET
+library(caret)
+library(randomForest)
+y <- as.factor(survived)
+bestmtry <- tuneRF(traindata,y, stepFactor=1.5, improve=1e-5, ntreeTry = 500)
+print(bestmtry)
+rf1 <- randomForest(factor(survived) ~ ., data=traindata[-1], keep.forest=TRUE, ntree=500, mtry=2)
+print(rf1) #OOB estimate of  error rate: 16.72%
+varImpPlot(rf1)
+#confusion Matrix
+table(survived, predict(rf1, traindata[,-1], type="response", norm.votes=TRUE))
+RFpred <- predict(rf1, testdata[,-1], type="response", norm.votes=TRUE)
+final_result <- data.frame(testdata$PassengerId, RFpred)
+names(final_result) <- c("PassengerId","Survived")
+write.csv(final_result,file = "RF.csv", row.names = FALSE)
+
+###############################################################
+#------------------------- XG BOOOST -------------------------#
+###############################################################
+str(traindata)
+str(testdata)
+library(xgboost)
+library(mlr)
+class(traindata$Pclass)
+traindata$Pclass <- as.numeric(as.character(traindata$Pclass))
+traindata$Title <- createDummyFeatures(traindata$Title)
+traindata$Embarked <- createDummyFeatures(traindata$Embarked)
+traindata$Sex <- createDummyFeatures(traindata$Sex)
+
+testdata$Pclass <- as.numeric(as.character(testdata$Pclass))
+testdata$Title <- createDummyFeatures(testdata$Title)
+testdata$Embarked <- createDummyFeatures(testdata$Embarked)
+testdata$Sex <- createDummyFeatures(testdata$Sex)
+
+
+bst <- xgboost(data=as.matrix(traindata),
+               label = survived, max_depth=5, eta=0.5, 
+               nthread=3, nrounds = 4, eval_metric = "error", 
+               objective="binary:logistic", verbose = 1)
+pred <- predict(bst,as.matrix(testdata))
+print(length(pred))
+print(head(pred))
+prediction <- as.numeric(pred>0.5)
+print(head(prediction))
+final_result <- data.frame(testdata$PassengerId, prediction)
+names(final_result) <- c("PassengerId","Survived")
+write.csv(final_result,file = "XGB.csv", row.names = FALSE)
