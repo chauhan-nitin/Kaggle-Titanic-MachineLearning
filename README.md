@@ -6,4 +6,4 @@ One of the reasons that the shipwreck led to such loss of life was that there we
 In this challenge, we ask you to complete the analysis of what sorts of people were likely to survive. In particular, we ask you to apply the tools of machine learning to predict which passengers survived the tragedy.
 
 In this repository, I've showcased my approach towards the problem and how I tried to predict the survival rate of the passengers onboard.
-## The code represented in this repository was ranked in the top 6% of all competing teams with 650th rank.
+### The code represented in this repository was ranked in the top 6% of all competing teams with 650th rank.
