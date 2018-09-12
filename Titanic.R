@@ -2,8 +2,10 @@
 #~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ Ingesting & Preprocessing Datasets ~ ~ ~ ~ ~ ~ ~ ~ ~ ~
 ###############################################################################
 rm(list=ls(all=TRUE))
-getwd() #Current working directory
-setwd("C:/Users/obc1/Desktop/INSOFE/Titanic Machine Learning") #Set working directory to where your data files are stored
+#Current working directory
+getwd()
+#Set working directory to where your data files are stored
+setwd("C:/Users/Desktop/Titanic Machine Learning") 
 library(ggplot2)
 library(ggrepel)
 
