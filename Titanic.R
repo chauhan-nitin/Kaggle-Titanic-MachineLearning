@@ -272,20 +272,22 @@ library(randomForest)
 y <- as.factor(valid$Survived)
 bestmtry <- tuneRF(valid[,-2],y, stepFactor=1.5, improve=1e-5, ntreeTry = 500)
 print(bestmtry)
+# Step 3: Create a model using hyperparameters obtained from Grid Search
 rf1 <- randomForest(factor(train$Survived) ~ ., data=train[-2], keep.forest=TRUE, ntree=500, mtry=2)
 print(rf1) # OOB estimate of  error rate: 16.72%
 varImpPlot(rf1)
 # confusion Matrix
 table(train$Survived, predict(rf1, train[,-2], type="response", norm.votes=TRUE))
 
-# Step 3: Tune the model using k fold cross validation
+# Step 4: Create a model using k-fold cross validation
 train_control <- trainControl(method="cv", number=10)
 # Fit SVM Radial Model
 rf2 <- train(factor(Survived) ~ ., data=train, trControl=train_control, method="rf")
 # Summarise Results
 print(rf2)
 
-# Step 4: Testing on unseen data 'testdata'
+# Compare the results of model rf1 & rf2 and which ever results in best result, use that model to predict on unseen data
+# Step 5: Testing on unseen data 'testdata'
 RFpred <- predict(rf2, testdata)
 final_result <- data.frame(testdata$PassengerId, RFpred)
 names(final_result) <- c("PassengerId","Survived")
