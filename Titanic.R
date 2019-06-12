@@ -114,7 +114,8 @@ testdata <- testdata.imp$ximp
 
 # Step 9: Identify number of observation for each class
 count_survived <- qplot(factor(traindata$Survived), fill = factor(traindata$Survived))
-count_survived + geom_label_repel(stat='count', aes(label=..count..), nudge_x = 0.0, nudge_y = -50)
+count_survived + geom_label_repel(stat='count', aes(label=..count..), nudge_x = 0.0, nudge_y = -50) + labs(title="No. of observation for each class",
+                                                                                                           x ="Class", y = "Count")
 "Since the labels are imbalanced in count, We will use Precision-Recall curves 
 as it summarize the trade-off between the true positive rate and 
 the positive predictive value for a predictive model using different probability thresholds."
@@ -124,10 +125,8 @@ the positive predictive value for a predictive model using different probability
 ###############################################################################
 #Plotting relation between Age & Survived on traindata
 ggplot(traindata, aes(x= Age, fill=factor(Survived))) + 
-  geom_bar(width=0.5) +
-  xlab("Age") + 
-  ylab("Total Count") + 
-  labs(fill="Survived")
+  geom_bar(width=0.5) + labs(title="Relation between Age & Survived", x ="Age", y = "Total Count", fill="Survived")
+  
 
 #Plotting relation between Sex & Survived on traindata
 ggplot(traindata, aes(x= Sex, fill=factor(Survived))) + 
